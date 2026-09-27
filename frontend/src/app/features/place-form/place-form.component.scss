@@ -1,0 +1,279 @@
+.form-hero {
+  padding: 4.5rem 0 3rem;
+}
+
+.form-hero__inner {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 2rem;
+}
+
+.form-hero h1 {
+  margin: 0;
+  font-size: clamp(2.5rem, 7vw, 5rem);
+  letter-spacing: -0.055em;
+  line-height: 1;
+}
+
+.form-hero p:last-child {
+  max-width: 700px;
+  margin: 1.1rem 0 0;
+  color: var(--muted);
+  font-size: 1.08rem;
+  line-height: 1.65;
+}
+
+.form-layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 280px;
+  gap: 1.2rem;
+  align-items: start;
+}
+
+form {
+  min-width: 0;
+}
+
+.form-card {
+  margin: 0 0 1rem;
+  padding: clamp(1.2rem, 3vw, 2rem);
+  border: 1px solid var(--line);
+  border-radius: 1.1rem;
+  background: var(--surface);
+  box-shadow: 0 7px 25px rgba(16, 61, 64, 0.045);
+}
+
+fieldset.form-card {
+  min-width: 0;
+}
+
+.form-card__heading {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.9rem;
+  margin-bottom: 1.5rem;
+}
+
+.form-card__heading > span {
+  display: grid;
+  width: 34px;
+  height: 34px;
+  flex: 0 0 auto;
+  place-items: center;
+  border-radius: 50%;
+  background: var(--brand);
+  color: white;
+  font-weight: 850;
+}
+
+.form-card__heading h2,
+.form-card__heading p {
+  margin: 0;
+}
+
+.form-card__heading h2 {
+  font-size: 1.35rem;
+}
+
+.form-card__heading p {
+  margin-top: 0.3rem;
+  color: var(--muted);
+  font-size: 0.88rem;
+}
+
+.field-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1rem;
+}
+
+.field,
+.field > span,
+.field > small {
+  display: block;
+}
+
+.field--wide {
+  grid-column: 1 / -1;
+}
+
+.field > span {
+  margin: 0 0 0.42rem 0.1rem;
+  color: var(--ink);
+  font-size: 0.82rem;
+  font-weight: 750;
+}
+
+.field > span strong {
+  color: var(--danger);
+}
+
+.field input,
+.field select,
+.field textarea,
+.question select {
+  width: 100%;
+  border: 1px solid #b9cbc5;
+  border-radius: 0.65rem;
+  background: #fff;
+  color: var(--ink);
+}
+
+.field input,
+.field select,
+.question select {
+  min-height: 46px;
+  padding: 0.68rem 0.78rem;
+}
+
+.field textarea {
+  padding: 0.78rem;
+  line-height: 1.5;
+  resize: vertical;
+}
+
+.field input[aria-invalid='true'],
+.field select[aria-invalid='true'],
+.field textarea[aria-invalid='true'] {
+  border-color: var(--danger);
+  box-shadow: 0 0 0 2px rgba(180, 35, 24, 0.1);
+}
+
+.field > small,
+.field-hint {
+  margin: 0.42rem 0 0 0.1rem;
+  color: var(--muted);
+  font-size: 0.75rem;
+  line-height: 1.45;
+}
+
+.field .field__error,
+.submit-panel__error {
+  color: var(--danger);
+  font-weight: 700;
+}
+
+.question-list {
+  display: grid;
+  gap: 0.65rem;
+}
+
+.question {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 150px;
+  gap: 1rem;
+  align-items: center;
+  padding: 0.9rem;
+  border: 1px solid var(--line);
+  border-radius: 0.8rem;
+  background: #fbfdfc;
+}
+
+.question strong,
+.question small {
+  display: block;
+}
+
+.question small {
+  margin-top: 0.25rem;
+  color: var(--muted);
+  line-height: 1.4;
+}
+
+.submit-panel {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 1.15rem;
+  border: 1px solid #a5c6bc;
+  border-radius: 1rem;
+  background: #eaf6f1;
+}
+
+.submit-panel strong,
+.submit-panel span {
+  display: block;
+}
+
+.submit-panel span {
+  margin-top: 0.25rem;
+  color: var(--muted);
+  font-size: 0.82rem;
+}
+
+.submit-panel__error {
+  width: 100%;
+  margin: 0;
+}
+
+.success-message a {
+  display: inline-block;
+  margin-top: 0.65rem;
+  font-weight: 750;
+}
+
+.side-note {
+  position: sticky;
+  top: 94px;
+  padding: 1.4rem;
+  border-radius: 1rem;
+  background: var(--ink);
+  color: white;
+}
+
+.side-note .eyebrow {
+  color: #8ee0d2;
+}
+
+.side-note h2 {
+  margin: 0;
+  font-size: 1.35rem;
+  line-height: 1.25;
+}
+
+.side-note ul {
+  margin: 1.2rem 0 0;
+  padding-left: 1.2rem;
+  color: #d6e4e3;
+  font-size: 0.86rem;
+  line-height: 1.75;
+}
+
+@media (max-width: 860px) {
+  .form-layout {
+    grid-template-columns: 1fr;
+  }
+
+  .side-note {
+    position: static;
+    grid-row: 1;
+  }
+}
+
+@media (max-width: 620px) {
+  .form-hero {
+    padding-top: 3rem;
+  }
+
+  .form-hero__inner,
+  .submit-panel {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  .field-grid,
+  .question {
+    grid-template-columns: 1fr;
+  }
+
+  .field--wide {
+    grid-column: auto;
+  }
+
+  .question select,
+  .submit-panel .button {
+    width: 100%;
+  }
+}

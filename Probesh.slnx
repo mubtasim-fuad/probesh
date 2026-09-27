@@ -1,0 +1,4 @@
+<Solution>
+  <Project Path="backend/Probesh.Api.csproj" />
+  <Project Path="tests/Probesh.Api.Tests/Probesh.Api.Tests.csproj" />
+</Solution>

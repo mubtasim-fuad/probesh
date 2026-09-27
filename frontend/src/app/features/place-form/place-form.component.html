@@ -1,0 +1,208 @@
+<section class="form-hero">
+  <div class="container form-hero__inner">
+    <div>
+      <p class="eyebrow">Community contribution</p>
+      <h1>Add accessibility details</h1>
+      <p>
+        Share only what you observed. Choose “Unknown” whenever you are unsure—honest
+        missing data is safer than a guess.
+      </p>
+    </div>
+    <a class="button button--secondary" routerLink="/">Back to places</a>
+  </div>
+</section>
+
+<div class="container form-layout">
+  <form [formGroup]="form" (ngSubmit)="submit()" novalidate>
+    <section class="form-card" aria-labelledby="place-details-title">
+      <div class="form-card__heading">
+        <span>1</span>
+        <div>
+          <h2 id="place-details-title">Place details</h2>
+          <p>Tell people exactly which place this record describes.</p>
+        </div>
+      </div>
+
+      <div class="field-grid">
+        <label class="field field--wide">
+          <span>Name <strong aria-hidden="true">*</strong></span>
+          <input
+            type="text"
+            formControlName="name"
+            autocomplete="organization"
+            [attr.aria-invalid]="hasError('name')"
+          />
+          @if (hasError('name')) {
+            <small class="field__error">Enter a name between 2 and 120 characters.</small>
+          }
+        </label>
+
+        <label class="field">
+          <span>Category <strong aria-hidden="true">*</strong></span>
+          <select formControlName="category">
+            @for (category of categories; track category) {
+              <option [value]="category">{{ category }}</option>
+            }
+          </select>
+        </label>
+
+        <label class="field">
+          <span>Area <strong aria-hidden="true">*</strong></span>
+          <input
+            type="text"
+            formControlName="area"
+            placeholder="Mirpur"
+            autocomplete="address-level3"
+            [attr.aria-invalid]="hasError('area')"
+          />
+          @if (hasError('area')) {
+            <small class="field__error">Enter the local area.</small>
+          }
+        </label>
+
+        <label class="field">
+          <span>City <strong aria-hidden="true">*</strong></span>
+          <input
+            type="text"
+            formControlName="city"
+            autocomplete="address-level2"
+            [attr.aria-invalid]="hasError('city')"
+          />
+          @if (hasError('city')) {
+            <small class="field__error">Enter the city.</small>
+          }
+        </label>
+
+        <label class="field field--wide">
+          <span>Full address <strong aria-hidden="true">*</strong></span>
+          <input
+            type="text"
+            formControlName="address"
+            autocomplete="street-address"
+            [attr.aria-invalid]="hasError('address')"
+          />
+          @if (hasError('address')) {
+            <small class="field__error">Enter an address between 5 and 240 characters.</small>
+          }
+        </label>
+
+        <label class="field">
+          <span>Latitude <strong aria-hidden="true">*</strong></span>
+          <input type="number" step="any" formControlName="latitude" />
+        </label>
+
+        <label class="field">
+          <span>Longitude <strong aria-hidden="true">*</strong></span>
+          <input type="number" step="any" formControlName="longitude" />
+        </label>
+
+        <p class="field-hint field--wide">
+          Dhaka coordinates are prefilled only for learning. Replace them with the actual
+          location before submitting real data.
+        </p>
+
+        <label class="field field--wide">
+          <span>Short description</span>
+          <textarea formControlName="description" rows="3" maxlength="800"></textarea>
+        </label>
+      </div>
+    </section>
+
+    <fieldset class="form-card">
+      <legend class="sr-only">Accessibility checklist</legend>
+      <div class="form-card__heading">
+        <span>2</span>
+        <div>
+          <h2>Accessibility checklist</h2>
+          <p>Unknown answers are excluded from the score rather than counted as “No.”</p>
+        </div>
+      </div>
+
+      <div class="question-list">
+        @for (question of accessibilityQuestions; track question.control) {
+          <label class="question">
+            <span>
+              <strong>{{ question.label }}</strong>
+              <small>{{ question.hint }}</small>
+            </span>
+            <select [formControlName]="question.control">
+              <option value="unknown">Unknown</option>
+              <option value="yes">Yes</option>
+              <option value="no">No</option>
+            </select>
+          </label>
+        }
+      </div>
+    </fieldset>
+
+    <section class="form-card" aria-labelledby="evidence-title">
+      <div class="form-card__heading">
+        <span>3</span>
+        <div>
+          <h2 id="evidence-title">Context and evidence</h2>
+          <p>Explain useful details that a checklist cannot capture.</p>
+        </div>
+      </div>
+
+      <div class="field-grid">
+        <label class="field field--wide">
+          <span>Notes</span>
+          <textarea
+            formControlName="notes"
+            rows="4"
+            maxlength="800"
+            placeholder="Example: The ramp is available through the side entrance."
+          ></textarea>
+        </label>
+
+        <label class="field field--wide">
+          <span>Public evidence photo URL</span>
+          <input
+            type="url"
+            formControlName="evidencePhotoUrl"
+            placeholder="https://example.com/photo.jpg"
+            [attr.aria-invalid]="hasError('evidencePhotoUrl')"
+          />
+          <small>Direct file uploads will be added after authentication and moderation.</small>
+          @if (hasError('evidencePhotoUrl')) {
+            <small class="field__error">Use a complete http:// or https:// URL.</small>
+          }
+        </label>
+      </div>
+    </section>
+
+    <div class="submit-panel" aria-live="polite">
+      @if (errorMessage()) {
+        <p class="submit-panel__error">{{ errorMessage() }}</p>
+      }
+
+      @if (submittedPlace(); as place) {
+        <div class="success-message">
+          <strong>Submission saved.</strong>
+          <span>{{ place.name }} is marked pending review.</span>
+          <a routerLink="/">View all places</a>
+        </div>
+      } @else {
+        <div>
+          <strong>Ready to contribute?</strong>
+          <span>Your submission will start as Pending Review.</span>
+        </div>
+        <button class="button" type="submit" [disabled]="submitting()">
+          {{ submitting() ? 'Saving…' : 'Submit place' }}
+        </button>
+      }
+    </div>
+  </form>
+
+  <aside class="side-note">
+    <p class="eyebrow">Before you submit</p>
+    <h2>Good accessibility data is careful data.</h2>
+    <ul>
+      <li>Report only public places.</li>
+      <li>Do not include faces or private information.</li>
+      <li>Use “Unknown” instead of guessing.</li>
+      <li>Describe the route to an alternate entrance.</li>
+      <li>Recheck details when a venue changes.</li>
+    </ul>
+  </aside>
+</div>

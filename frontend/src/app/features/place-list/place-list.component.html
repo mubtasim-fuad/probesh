@@ -1,0 +1,156 @@
+<section class="hero">
+  <div class="container hero__grid">
+    <div>
+      <p class="eyebrow">Community accessibility map</p>
+      <h1>Know before you go.</h1>
+      <p class="hero__copy">
+        Find practical accessibility details for places in Bangladesh—or add what you
+        observed so the next person can plan with confidence.
+      </p>
+      <div class="hero__actions">
+        <a class="button" routerLink="/places/new">Add a place</a>
+        <a class="button button--secondary" href="#places">Explore places</a>
+      </div>
+    </div>
+
+    <aside class="principle-card" aria-label="How Probesh scores a place">
+      <span class="principle-card__icon" aria-hidden="true">✓</span>
+      <p class="eyebrow">Explainable by design</p>
+      <h2>A score is never the whole story.</h2>
+      <p>
+        Probesh shows every known, unknown, yes, and no answer behind an accessibility
+        score.
+      </p>
+    </aside>
+  </div>
+</section>
+
+<section class="container stats" aria-label="Probesh summary">
+  @if (summary(); as data) {
+    <article>
+      <strong>{{ data.totalPlaces }}</strong>
+      <span>Places listed</span>
+    </article>
+    <article>
+      <strong>{{ data.verifiedPlaces }}</strong>
+      <span>Verified records</span>
+    </article>
+    <article>
+      <strong>{{ data.highlyAccessiblePlaces }}</strong>
+      <span>Highly accessible</span>
+    </article>
+    <article>
+      <strong>{{ data.averageScore }}%</strong>
+      <span>Average known score</span>
+    </article>
+  } @else {
+    <p class="stats__placeholder">Loading community summary…</p>
+  }
+</section>
+
+<section id="places" class="container places-section" aria-labelledby="places-title">
+  <div class="section-heading">
+    <div>
+      <p class="eyebrow">Explore</p>
+      <h2 id="places-title">Accessibility details, not assumptions</h2>
+    </div>
+    <p>{{ filteredPlaces().length }} result{{ filteredPlaces().length === 1 ? '' : 's' }}</p>
+  </div>
+
+  <div class="filters" role="search" aria-label="Filter places">
+    <label>
+      <span>Search name or area</span>
+      <input
+        #searchInput
+        type="search"
+        placeholder="Try Mirpur or clinic"
+        (input)="search.set(searchInput.value)"
+      />
+    </label>
+
+    <label>
+      <span>Category</span>
+      <select #categorySelect (change)="setCategory(categorySelect.value)">
+        <option value="All">All categories</option>
+        @for (item of categories; track item) {
+          <option [value]="item">{{ item }}</option>
+        }
+      </select>
+    </label>
+
+    <label>
+      <span>Accessibility</span>
+      <select #levelSelect (change)="setLevel(levelSelect.value)">
+        <option value="All">All levels</option>
+        @for (item of levels; track item) {
+          <option [value]="item">{{ humanize(item) }}</option>
+        }
+      </select>
+    </label>
+  </div>
+
+  <div aria-live="polite">
+    @if (loading()) {
+      <div class="message-card">Loading places from the API…</div>
+    } @else if (errorMessage()) {
+      <div class="message-card message-card--error">
+        <p>{{ errorMessage() }}</p>
+        <button class="button" type="button" (click)="loadData()">Retry</button>
+      </div>
+    } @else if (filteredPlaces().length === 0) {
+      <div class="message-card">
+        <h3>No places match these filters.</h3>
+        <p>Clear a filter or contribute the first record for this area.</p>
+        <a class="button" routerLink="/places/new">Add a place</a>
+      </div>
+    } @else {
+      <div class="place-grid">
+        @for (place of filteredPlaces(); track place.id) {
+          <article class="place-card">
+            <header>
+              <div>
+                <p class="place-card__category">{{ place.category }}</p>
+                <h3>{{ place.name }}</h3>
+                <p class="place-card__location">{{ place.area }}, {{ place.city }}</p>
+              </div>
+              <span class="status" [class.status--pending]="place.verificationStatus === 'PendingReview'">
+                {{ humanize(place.verificationStatus) }}
+              </span>
+            </header>
+
+            <div class="score-row">
+              <div class="score" [attr.aria-label]="'Accessibility score ' + place.audit.score + ' percent'">
+                <strong>{{ place.audit.score }}%</strong>
+                <span>{{ humanize(place.audit.level) }}</span>
+              </div>
+              <div class="score-track" aria-hidden="true">
+                <span [style.width.%]="place.audit.score"></span>
+              </div>
+              <small>{{ place.audit.knownFeatureCount }} of 6 features known</small>
+            </div>
+
+            <dl class="feature-list">
+              @for (feature of featureRows(place.audit); track feature.label) {
+                <div>
+                  <dt>{{ feature.label }}</dt>
+                  <dd [class]="answerClass(feature.value)">
+                    {{ answerLabel(feature.value) }}
+                  </dd>
+                </div>
+              }
+            </dl>
+
+            @if (place.audit.notes) {
+              <p class="place-card__note">“{{ place.audit.notes }}”</p>
+            }
+
+            <footer>
+              <span>{{ place.address }}</span>
+              <span>Updated {{ place.audit.createdAtUtc | date: 'mediumDate' }}</span>
+            </footer>
+          </article>
+        }
+      </div>
+    }
+  </div>
+</section>
